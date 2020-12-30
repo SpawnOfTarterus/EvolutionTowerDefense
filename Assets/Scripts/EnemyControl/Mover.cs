@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using ETD.PathFinding;
+using ETD.PlayerControl;
 
 namespace ETD.EnemyControl
 {
@@ -35,7 +36,7 @@ namespace ETD.EnemyControl
 
         private void Move()
         {
-            if(path == null) { Debug.Log("No Path!");  return; }
+            if(path == null) { Debug.LogError("No Path!");  return; }
             if(isFinished) { return; }
             if(waypoints == null) { waypoints = path.GetPath(); }
             Transform nextWaypoint = waypoints[nextWaypointIndex].transform;
@@ -54,7 +55,8 @@ namespace ETD.EnemyControl
         {
             isFinished = true;
             Debug.Log("Finished path!");
-            Destroy(gameObject);
+            FindObjectOfType<Lives>().LoseLife();
+            GetComponent<Enemy>().Die();
         }
 
     }

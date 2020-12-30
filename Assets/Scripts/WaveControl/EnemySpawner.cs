@@ -11,6 +11,7 @@ namespace ETD.WaveControl
         [SerializeField] Wave[] waves;
         [SerializeField] Pathing path;
         [SerializeField] float timeBetweenWaves = 10f;
+        [SerializeField] List<Enemy> enemiesInPlay = new List<Enemy>();
 
         int waveToSpawnIndex = 0;
         Wave currentWave;
@@ -22,15 +23,25 @@ namespace ETD.WaveControl
 
         IEnumerator SpawnWave(int spawnIndex)
         {
+            if(waves.Length == 0) { Debug.LogError("No wave to spawn. Add wave to spawner."); yield break; }
             currentWave = waves[spawnIndex];
             for(int i = 0; i < currentWave.GetEnemyCount(); i++)
             {
                 yield return SpawnEnemy();           
             }
-            Debug.Log("Wave Finished,");
-            yield return new WaitForSeconds(timeBetweenWaves);
+            while (enemiesInPlay.Count > 0)
+            {
+                yield return null;
+            }
+            Debug.Log("Wave Finished.");
+            yield return SpawnNextWave();
+        }
+
+        IEnumerator SpawnNextWave()
+        {
             if(waveToSpawnIndex < waves.Length - 1)
             {
+                yield return new WaitForSeconds(timeBetweenWaves);
                 waveToSpawnIndex++;
                 StartCoroutine(SpawnWave(waveToSpawnIndex));
             }
@@ -46,7 +57,14 @@ namespace ETD.WaveControl
             Vector3 spawnPosition = path.GetPath()[0].transform.position;
             Enemy enemyInstance = Instantiate(enemyToSpawn, spawnPosition, transform.rotation);
             enemyInstance.GetComponent<Mover>().SetPath(path);
+            enemyInstance.SetMySpawner(this);
+            enemiesInPlay.Add(enemyInstance);
             yield return new WaitForSeconds(currentWave.GetSpawnDelay());
+        }
+
+        public void RemoveFromEnemiesInPlay(Enemy enemy)
+        {
+            enemiesInPlay.Remove(enemy);
         }
 
 
