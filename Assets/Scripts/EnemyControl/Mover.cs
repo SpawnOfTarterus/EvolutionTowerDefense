@@ -11,12 +11,14 @@ namespace ETD.EnemyControl
     {
         [SerializeField] float moveSpeed = 1f;
         [SerializeField] float closeEnoughToWaypoint = .5f;
+        [SerializeField] bool isPathTester = false;
+        [SerializeField] Pathing path;
 
-        Pathing path;
         NavMeshAgent navMeshAgent;
         Waypoint[] waypoints;
         int nextWaypointIndex = 0;
         bool isFinished = false;
+        
 
         public void SetPath(Pathing newPath)
         {
@@ -31,6 +33,7 @@ namespace ETD.EnemyControl
 
         private void Update()
         {
+            if(isPathTester) { return; }
             Move();
         }
 
@@ -57,6 +60,21 @@ namespace ETD.EnemyControl
             Debug.Log("Finished path!");
             FindObjectOfType<Lives>().LoseLife();
             GetComponent<Enemy>().Die();
+        }
+
+        public bool IsPathBlocked()
+        {
+            waypoints = path.GetPath();
+            foreach(Waypoint waypoint in waypoints)
+            {
+                NavMeshPath path = new NavMeshPath();
+                navMeshAgent.CalculatePath(waypoint.transform.position, path);
+                if(path.status == NavMeshPathStatus.PathPartial)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
     }

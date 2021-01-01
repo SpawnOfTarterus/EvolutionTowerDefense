@@ -11,7 +11,8 @@ namespace ETD.PlayerControl
         [SerializeField] float zoomOutCameraAngle = 65f;
         [SerializeField] float zoomInCameraHeight = 2.5f;
         [SerializeField] float zoomInCameraAngle = 10f;
-        [SerializeField] float movementMultiplyer = 20f;
+        [SerializeField] float dragMovementMultiplyer = 20f;
+        [SerializeField] float followMovementMultiplyer = .5f;
 
         float onePercentofZoomHightDifference;
         float onePercentofZoomAngleDifference;
@@ -41,15 +42,43 @@ namespace ETD.PlayerControl
 
         private void MovementControl()
         {
-            if(Input.GetMouseButtonDown(0))
+            KeyControl();
+            //FollowCursor();
+            DragControl();
+        }
+
+        private void KeyControl()
+        {
+            if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) 
+            { myCamera.position += Vector3.left * followMovementMultiplyer; }
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            { myCamera.position += Vector3.right * followMovementMultiplyer; }
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            { myCamera.position += Vector3.forward * followMovementMultiplyer; }
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            { myCamera.position += Vector3.back * followMovementMultiplyer; }
+        }
+
+        private void FollowCursor()
+        {
+            Vector3 rawMousePos = myCamera.GetComponent<Camera>().ScreenToViewportPoint(Input.mousePosition);
+            Vector3 MousePos = new Vector3(rawMousePos.x * 2 - 1, rawMousePos.y * 2 - 1, rawMousePos.z);
+            if (MousePos.x >= 1) { myCamera.position += Vector3.right * followMovementMultiplyer; }
+            if (MousePos.x <= -1) { myCamera.position += Vector3.left * followMovementMultiplyer; }
+            if (MousePos.y >= 1) { myCamera.position += Vector3.forward * followMovementMultiplyer; }
+            if (MousePos.y <= -1) { myCamera.position += Vector3.back * followMovementMultiplyer; }
+        }
+
+        private void DragControl()
+        {
+            if (Input.GetMouseButtonDown(1))
             {
                 StoreInitialClickInformation();
             }
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(1))
             {
                 DragToMoveCamera();
             }
-
         }
 
         private void StoreInitialClickInformation()
@@ -67,9 +96,9 @@ namespace ETD.PlayerControl
                 (rawMousePos.x * aspectRatioMultiplyer.x, rawMousePos.y * aspectRatioMultiplyer.y, rawMousePos.z);
             Vector3 directionMoved = newMousePos - mousePosOnClick;
             myCamera.position = new Vector3
-                (cameraPosOnClick.x + (-directionMoved.x * movementMultiplyer),
+                (cameraPosOnClick.x + (-directionMoved.x * dragMovementMultiplyer),
                 cameraPosOnClick.y,
-                cameraPosOnClick.z + (-directionMoved.y * movementMultiplyer));
+                cameraPosOnClick.z + (-directionMoved.y * dragMovementMultiplyer));
         }
 
         private void ZoomControl()
@@ -113,7 +142,7 @@ namespace ETD.PlayerControl
             {
                 myCamera.position -= new Vector3(0, onePercentofZoomHightDifference * zoomHeightSpeedFactor, 0);
                 if (myCamera.position.y < zoomInCameraHeight) { myCamera.position = new Vector3(0, zoomInCameraHeight, 0); }
-                movementMultiplyer -= 0.2f; //decreases camera movement speed when zoomed in
+                dragMovementMultiplyer -= 0.2f; //decreases camera movement speed when zoomed in
             }
         }
 
@@ -123,7 +152,7 @@ namespace ETD.PlayerControl
             {
                 myCamera.position += new Vector3(0, onePercentofZoomHightDifference * zoomHeightSpeedFactor, 0);
                 if (myCamera.position.y > zoomOutCameraHeight) { myCamera.position = new Vector3(0, zoomOutCameraHeight, 0); }
-                movementMultiplyer += 0.2f; //increases camera movement speed when zoomed out
+                dragMovementMultiplyer += 0.2f; //increases camera movement speed when zoomed out
             }
         }
 

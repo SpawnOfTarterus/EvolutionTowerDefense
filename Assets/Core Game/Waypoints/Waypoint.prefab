@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8965248915345890070}
   - component: {fileID: 1157733930}
+  - component: {fileID: 1738712917649665053}
   m_Layer: 0
   m_Name: Waypoint
   m_TagString: Untagged
@@ -44,6 +45,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea658801af6b85499fb445ee5e0d16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1738712917649665053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969849012705033853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adeff3e20d870d143935ca5995d37aa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showGrid: 0
+  gridSize: 10
+  gridSpacing: 0.5
 --- !u!1 &9061248743991043178
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,7 +87,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9061248743991043178}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8965248915345890070}

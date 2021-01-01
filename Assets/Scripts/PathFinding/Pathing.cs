@@ -12,5 +12,19 @@ namespace ETD.PathFinding
         {
             return waypoints;
         }
+
+        [ExecuteAlways]
+        private void Update()
+        {
+            DrawGizmoToConnectWaypoints();
+        }
+
+        private void DrawGizmoToConnectWaypoints()
+        {
+           foreach(Waypoint waypoint in waypoints)
+           {
+
+           }
+        }
     }
 }
