@@ -95,6 +95,7 @@ namespace ETD.TowerControl
             }
             towerDisplay.GetComponentInChildren<MeshRenderer>().material = originalMaterial;
             towerDisplay.SetAsBuilt();
+            towerDisplay.GetComponent<GridControl>().SetShowGrid(false);
             towerDisplay = null;
             if(isBuildingMultiple) 
             { 

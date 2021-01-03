@@ -13,6 +13,13 @@ namespace ETD.TowerControl
 
         int valueRetention;
 
+        public void SetShowGrid(bool setter)
+        {
+            showGrid = setter;
+        }
+
+ 
+
         private void Update()
         {
             SnapMechanic();

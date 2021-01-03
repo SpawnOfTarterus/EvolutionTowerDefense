@@ -18,7 +18,6 @@ namespace ETD.EnemyControl
         Waypoint[] waypoints;
         int nextWaypointIndex = 0;
         bool isFinished = false;
-        
 
         public void SetPath(Pathing newPath)
         {
@@ -59,7 +58,7 @@ namespace ETD.EnemyControl
             isFinished = true;
             Debug.Log("Finished path!");
             FindObjectOfType<Lives>().LoseLife();
-            GetComponent<Enemy>().Die();
+            GetComponent<Health>().Die();
         }
 
         public bool IsPathBlocked()

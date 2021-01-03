@@ -7,18 +7,23 @@ namespace ETD.EnemyControl
 {
     public class Enemy : MonoBehaviour
     {
+        [SerializeField] Transform hitTransform = null;
+
         EnemySpawner mySpawner;
+
+        public Transform GetHitTransform()
+        {
+            return hitTransform;
+        }
+
+        public EnemySpawner GetMySpawner()
+        {
+            return mySpawner;
+        }
 
         public void SetMySpawner(EnemySpawner spawner)
         {
             mySpawner = spawner;
         }
-
-        public void Die()
-        {
-            mySpawner.RemoveFromEnemiesInPlay(this);
-            Destroy(gameObject);
-        }
-
     }
 }
