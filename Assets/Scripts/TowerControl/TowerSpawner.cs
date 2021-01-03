@@ -1,4 +1,5 @@
 using ETD.EnemyControl;
+using ETD.PlayerControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,12 +22,14 @@ namespace ETD.TowerControl
         Material originalMaterial;
         bool isBuildable = true;
         bool isBuildingMultiple = false;
+        GoldController bank;
 
         private void Start()
         {
             green = new Color(0f, 200f, 0f, buildPreviewMaterial.color.a);
             red = new Color(200f, 0f, 0f, buildPreviewMaterial.color.a);
             groundLayerMask = 1 << ground.layer;
+            bank = FindObjectOfType<GoldController>();
         }
 
         private void Update()
@@ -70,6 +73,12 @@ namespace ETD.TowerControl
             }
             if (Input.GetMouseButtonDown(0))
             {
+                if(!HaveEnoughGold()) 
+                {
+                    Debug.Log("Not enough gold.");
+                    StartCoroutine(FlashVisualIndicatorCantBuilt());
+                    return; 
+                }
                 if (isBuildable)
                 {
                     StartCoroutine(BuildTower());
@@ -79,6 +88,18 @@ namespace ETD.TowerControl
                     Debug.Log("Can't build here.");
                     isBuildingMultiple = false;
                 }
+            }
+        }
+
+        private bool HaveEnoughGold()
+        {
+            if(bank.GetCurrentGold() >= towerDisplay.GetCost())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -96,6 +117,7 @@ namespace ETD.TowerControl
             towerDisplay.GetComponentInChildren<MeshRenderer>().material = originalMaterial;
             towerDisplay.SetAsBuilt();
             towerDisplay.GetComponent<GridControl>().SetShowGrid(false);
+            bank.SpendGold(towerDisplay.GetCost());
             towerDisplay = null;
             if(isBuildingMultiple) 
             { 

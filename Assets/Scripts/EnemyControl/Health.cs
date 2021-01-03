@@ -1,3 +1,4 @@
+using ETD.PlayerControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace ETD.EnemyControl
     {
         [SerializeField] int maxHealth;
         [SerializeField] int currentHealth;
+
+        bool isDead = false;
 
         private void Start()
         {
@@ -26,8 +29,14 @@ namespace ETD.EnemyControl
 
         public void Die()
         {
+            if(isDead) { return; }
+            isDead = true;
             Enemy enemyComponent = GetComponent<Enemy>();
             enemyComponent.GetMySpawner().RemoveFromEnemiesInPlay(enemyComponent);
+            if(currentHealth == 0)
+            {
+                FindObjectOfType<GoldController>().GainGold(enemyComponent.GetGoldReward());
+            }
             Destroy(gameObject);
         }
 

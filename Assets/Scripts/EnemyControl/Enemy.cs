@@ -8,6 +8,7 @@ namespace ETD.EnemyControl
     public class Enemy : MonoBehaviour
     {
         [SerializeField] Transform hitTransform = null;
+        [SerializeField] int goldReward = 1;
 
         EnemySpawner mySpawner;
 
@@ -24,6 +25,11 @@ namespace ETD.EnemyControl
         public void SetMySpawner(EnemySpawner spawner)
         {
             mySpawner = spawner;
+        }
+
+        public int GetGoldReward()
+        {
+            return goldReward;
         }
     }
 }

@@ -197,6 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitTransform: {fileID: 7214533920659239566}
+  goldReward: 5
 --- !u!114 &1714368694290614614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,5 +226,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbdfd4ff5b8c91641bddb6c1f0b0f3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 2
+  maxHealth: 5
   currentHealth: 0

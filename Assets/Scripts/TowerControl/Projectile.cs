@@ -24,14 +24,24 @@ namespace ETD.TowerControl
 
         private void Update()
         {
+            SelfDestruct();
             MoveAtTarget();
         }
 
         private void MoveAtTarget()
         {
+            if(target == null) { return; }
             Vector3 targetPos = target.GetHitTransform().position;
             transform.LookAt(targetPos);
             transform.position += transform.forward * Time.deltaTime * moveSpeed;
+        }
+
+        private void SelfDestruct()
+        {
+            if(target == null)
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
