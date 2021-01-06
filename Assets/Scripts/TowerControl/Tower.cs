@@ -11,52 +11,14 @@ namespace ETD.TowerControl
         [SerializeField] float range;
         [SerializeField] int cost;
         [SerializeField] float timeBetweenAttacks;
-        [SerializeField] bool isBuilt = false;
         [SerializeField] Projectile projectile;
 
         Enemy target;
         float attackTimer = Mathf.Infinity;
-        TowerSpawner mySpawner = null;
-
-        public int GetCost()
-        {
-            return cost;
-        }
-
-        public void SetSpawner(TowerSpawner newSpawner)
-        {
-            mySpawner = newSpawner;
-        }
-
-        public void SetAsBuilt()
-        {
-            isBuilt = true;
-        }
 
         private void Update()
         {
             AttackMechanic();
-        }
-
-
-        private void OnTriggerStay(Collider other)
-        {
-            if(isBuilt) { return; }
-            Debug.Log("Collision in progress.");
-            if (other.GetComponent<Tower>() || other.GetComponent<Enemy>())
-            {
-                mySpawner.ToggleColorBuildIndicator(false);
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if(isBuilt) { return; }
-            Debug.Log("exit collision.");
-            if (other.GetComponent<Tower>() || other.GetComponent<Enemy>())
-            {
-                mySpawner.ToggleColorBuildIndicator(true);
-            }
         }
 
         private void AttackMechanic()

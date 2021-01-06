@@ -1,21 +1,22 @@
 using ETD.EnemyControl;
 using ETD.PlayerControl;
+using ETD.SelectionControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-namespace ETD.TowerControl
+namespace ETD.BuildingControl
 {
-    public class TowerSpawner : MonoBehaviour
+    public class BuildingSpawner : MonoBehaviour
     {
         [SerializeField] GameObject ground = null;
         [SerializeField] Material buildPreviewMaterial = null;
         [SerializeField] Mover pathTester = null;
 
-        Tower lastTowerDisplay = null;
-        Tower towerDisplay = null;
+        Building lastBuildingDisplayed = null;
+        Building buildingDisplay = null;
         Color green;
         Color red;
         int groundLayerMask;
@@ -34,7 +35,7 @@ namespace ETD.TowerControl
 
         private void Update()
         {
-            UpdateTowerDisplay();
+            UpdateBuildingDisplay();
         }
 
         public void ToggleColorBuildIndicator(bool ableToBuild)
@@ -44,23 +45,25 @@ namespace ETD.TowerControl
             else { buildPreviewMaterial.color = red; }
         }
 
-        public void DisplayTowerToSpawn(Tower towerPrefab)
+        public void DisplayBuildingToSpawn(Building buildingPrefab)
         {
-            lastTowerDisplay = towerPrefab;
-            towerDisplay = Instantiate(towerPrefab);
-            towerDisplay.SetSpawner(this);
-            var meshRenderer = towerDisplay.GetComponentInChildren<MeshRenderer>();
+            FindObjectOfType<SelectionHandler>().SetIsBuilding(true);
+            if (buildingPrefab == null) { Debug.LogError("buildingPrefab not assigned."); }
+            lastBuildingDisplayed = buildingPrefab;
+            buildingDisplay = Instantiate(buildingPrefab);
+            buildingDisplay.SetSpawner(this);
+            var meshRenderer = buildingDisplay.GetComponentInChildren<MeshRenderer>();
             originalMaterial = meshRenderer.material;
             meshRenderer.material = buildPreviewMaterial;
-            towerDisplay.GetComponent<NavMeshObstacle>().enabled = false;
+            buildingDisplay.GetComponent<NavMeshObstacle>().enabled = false;
         }
 
-        private void UpdateTowerDisplay()
+        private void UpdateBuildingDisplay()
         {
-            if (towerDisplay == null) { return; }
+            if (buildingDisplay == null) { return; }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayerMask)) { return; }
-            towerDisplay.transform.position = hit.point;
+            buildingDisplay.transform.position = hit.point;
             CancelBuild();
             AttemptBuild();
         }
@@ -93,7 +96,7 @@ namespace ETD.TowerControl
 
         private bool HaveEnoughGold()
         {
-            if(bank.GetCurrentGold() >= towerDisplay.GetCost())
+            if(bank.GetCurrentGold() >= buildingDisplay.GetCost())
             {
                 return true;
             }
@@ -105,25 +108,27 @@ namespace ETD.TowerControl
 
         IEnumerator BuildTower()
         {
-            towerDisplay.GetComponent<NavMeshObstacle>().enabled = true;
+            buildingDisplay.GetComponent<NavMeshObstacle>().enabled = true;
             yield return new WaitForSeconds(Mathf.Epsilon);
             if(pathTester.IsPathBlocked()) 
             {
-                towerDisplay.GetComponent<NavMeshObstacle>().enabled = false;
+                buildingDisplay.GetComponent<NavMeshObstacle>().enabled = false;
                 StartCoroutine(FlashVisualIndicatorCantBuilt());
                 Debug.Log("Can't build here. Blocking Path");
                 yield break;
             }
-            towerDisplay.GetComponentInChildren<MeshRenderer>().material = originalMaterial;
-            towerDisplay.SetAsBuilt();
-            towerDisplay.GetComponent<GridControl>().SetShowGrid(false);
-            bank.SpendGold(towerDisplay.GetCost());
-            towerDisplay = null;
-            if(isBuildingMultiple) 
+            buildingDisplay.GetComponentInChildren<MeshRenderer>().material = originalMaterial;
+            buildingDisplay.SetAsBuilt();
+            buildingDisplay.GetComponent<GridControl>().SetShowGrid(false);
+            bank.SpendGold(buildingDisplay.GetCost());
+            buildingDisplay = null;
+            if (isBuildingMultiple) 
             { 
-                DisplayTowerToSpawn(lastTowerDisplay); 
-                isBuildingMultiple = false; 
+                DisplayBuildingToSpawn(lastBuildingDisplayed); 
+                isBuildingMultiple = false;
+                yield break;
             }
+            FindObjectOfType<SelectionHandler>().SetIsBuilding(false);
             yield return null;
         }
 
@@ -138,7 +143,8 @@ namespace ETD.TowerControl
         {
             if(Input.GetMouseButtonDown(1))
             {
-                Destroy(towerDisplay.gameObject);
+                Destroy(buildingDisplay.gameObject);
+                FindObjectOfType<SelectionHandler>().SetIsBuilding(false);
             }
         }
 

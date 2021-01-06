@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ETD.TowerControl
+namespace ETD.BuildingControl
 {
     [ExecuteInEditMode]
     public class GridControl : MonoBehaviour
@@ -17,8 +17,6 @@ namespace ETD.TowerControl
         {
             showGrid = setter;
         }
-
- 
 
         private void Update()
         {
