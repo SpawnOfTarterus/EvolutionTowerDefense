@@ -12,6 +12,11 @@ namespace ETD.EnemyControl
 
         bool isDead = false;
 
+        public int GetMaxHealth()
+        {
+            return maxHealth;
+        }
+
         private void Start()
         {
             currentHealth = maxHealth;

@@ -25,6 +25,7 @@ namespace ETD.SelectionControl
 
         private void Update()
         {
+            if(FindObjectOfType<UIMenuSection>().isPaused) { return; }
             mouseOverUI = EventSystem.current.IsPointerOverGameObject();
             MakeSelection();
         }

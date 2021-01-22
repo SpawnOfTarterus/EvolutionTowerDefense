@@ -12,6 +12,7 @@ namespace ETD.WaveControl
         [SerializeField] Pathing path;
         [SerializeField] float timeBetweenWaves = 10f;
         [SerializeField] List<Enemy> enemiesInPlay = new List<Enemy>();
+        [SerializeField] Transform enemiesParent = null;
 
         int waveToSpawnIndex = 0;
         Wave currentWave;
@@ -55,7 +56,7 @@ namespace ETD.WaveControl
         {
             Enemy enemyToSpawn = currentWave.GetEnemy();
             Vector3 spawnPosition = path.GetPath()[0].transform.position;
-            Enemy enemyInstance = Instantiate(enemyToSpawn, spawnPosition, transform.rotation);
+            Enemy enemyInstance = Instantiate(enemyToSpawn, spawnPosition, transform.rotation, enemiesParent);
             enemyInstance.GetComponent<Mover>().SetPath(path);
             enemyInstance.SetMySpawner(this);
             enemiesInPlay.Add(enemyInstance);

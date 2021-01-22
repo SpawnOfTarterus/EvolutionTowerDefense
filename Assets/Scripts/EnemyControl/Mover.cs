@@ -19,6 +19,11 @@ namespace ETD.EnemyControl
         int nextWaypointIndex = 0;
         bool isFinished = false;
 
+        public float GetMoveSpeed()
+        {
+            return moveSpeed;
+        }
+
         public void SetPath(Pathing newPath)
         {
             path = newPath;

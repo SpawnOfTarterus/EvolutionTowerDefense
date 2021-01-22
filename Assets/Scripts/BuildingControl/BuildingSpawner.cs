@@ -1,10 +1,13 @@
 using ETD.EnemyControl;
 using ETD.PlayerControl;
 using ETD.SelectionControl;
+using ETD.TowerControl;
+using ETD.UIControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ETD.BuildingControl
@@ -14,13 +17,14 @@ namespace ETD.BuildingControl
         [SerializeField] GameObject ground = null;
         [SerializeField] Material buildPreviewMaterial = null;
         [SerializeField] Mover pathTester = null;
+        [SerializeField] Transform towerParent = null;
+        [SerializeField] Transform projectileParent = null;
 
         Building lastBuildingDisplayed = null;
         Building buildingDisplay = null;
         Color green;
         Color red;
         int groundLayerMask;
-        Material originalMaterial;
         bool isBuildable = true;
         bool isBuildingMultiple = false;
         GoldController bank;
@@ -47,15 +51,14 @@ namespace ETD.BuildingControl
 
         public void DisplayBuildingToSpawn(Building buildingPrefab)
         {
+            if (buildingDisplay != null) { return; }
             FindObjectOfType<SelectionHandler>().SetIsBuilding(true);
             if (buildingPrefab == null) { Debug.LogError("buildingPrefab not assigned."); }
             lastBuildingDisplayed = buildingPrefab;
-            buildingDisplay = Instantiate(buildingPrefab);
+            buildingDisplay = Instantiate(buildingPrefab, towerParent);
             buildingDisplay.SetSpawner(this);
-            var meshRenderer = buildingDisplay.GetComponentInChildren<MeshRenderer>();
-            originalMaterial = meshRenderer.material;
-            meshRenderer.material = buildPreviewMaterial;
             buildingDisplay.GetComponent<NavMeshObstacle>().enabled = false;
+            if (buildingDisplay.TryGetComponent(out Attacker attacker)) { attacker.enabled = false; }
         }
 
         private void UpdateBuildingDisplay()
@@ -76,7 +79,12 @@ namespace ETD.BuildingControl
             }
             if (Input.GetMouseButtonDown(0))
             {
-                if(!HaveEnoughGold()) 
+                if(EventSystem.current.IsPointerOverGameObject())
+                {
+                    Debug.Log("Can't build through UI.");
+                    return;
+                }
+                if (!HaveEnoughGold()) 
                 {
                     Debug.Log("Not enough gold.");
                     StartCoroutine(FlashVisualIndicatorCantBuilt());
@@ -117,12 +125,20 @@ namespace ETD.BuildingControl
                 Debug.Log("Can't build here. Blocking Path");
                 yield break;
             }
-            buildingDisplay.GetComponentInChildren<MeshRenderer>().material = originalMaterial;
             buildingDisplay.SetAsBuilt();
+            if (buildingDisplay.TryGetComponent(out Attacker attacker)) 
+            { attacker.enabled = true; attacker.SetProjectileParent(projectileParent); }
             buildingDisplay.GetComponent<GridControl>().SetShowGrid(false);
             bank.SpendGold(buildingDisplay.GetCost());
             buildingDisplay = null;
-            if (isBuildingMultiple) 
+            if(!lastBuildingDisplayed.GetComponent<Tower>())
+            {
+                FindObjectOfType<UISelectionSection>().SetSelected
+                    (lastBuildingDisplayed.GetComponent<UISelectionDescription>());
+                FindObjectOfType<SelectionHandler>().SetIsBuilding(false);
+                yield break;
+            }
+            if (isBuildingMultiple)
             { 
                 DisplayBuildingToSpawn(lastBuildingDisplayed); 
                 isBuildingMultiple = false;

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using ETD.TowerControl;
 using ETD.EnemyControl;
+using ETD.UIControl;
 
 namespace ETD.BuildingControl
 {
     public class Building : MonoBehaviour
     {
-        [SerializeField] int cost;
         [SerializeField] bool isBuilt = false;
+        [SerializeField] GameObject buildIndicator = null;
+
+        int costToBuild;
 
         BuildingSpawner mySpawner;
 
         public int GetCost()
         {
-            return cost;
+            return costToBuild;
         }
 
         public void SetSpawner(BuildingSpawner newSpawner)
@@ -28,11 +31,22 @@ namespace ETD.BuildingControl
             isBuilt = true;
         }
 
+        private void Start()
+        {
+            costToBuild = GetComponent<UISelectionDescription>().GetBuildCost();
+        }
+
+        private void Update()
+        {
+            buildIndicator.SetActive(!isBuilt);
+        }
+
         private void OnTriggerStay(Collider other)
         {
             if (isBuilt) { return; }
             if (other.GetComponent<Tower>() || other.GetComponent<Enemy>() || other.GetComponent<Building>())
             {
+                Debug.Log("Collision in progress - " + other.name);
                 mySpawner.ToggleColorBuildIndicator(false);
             }
         }

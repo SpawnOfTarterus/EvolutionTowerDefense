@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 501dbebe6ad71214d98821cebacda238, type: 3}
-  m_Name: Test Wave
+  m_Name: Hundred Maze Test Wave
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: -8095522139125849403, guid: db443d1b232a8504f91abc1f1d7a838c, type: 3}
-  enemyCount: 5
-  spawnDelay: 1
+  enemyPrefab: {fileID: 3128684297894638056, guid: d89c2f25b51118448a3dd5dfff513fea, type: 3}
+  enemyCount: 20
+  spawnDelay: 0.5

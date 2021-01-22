@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501dbebe6ad71214d98821cebacda238, type: 3}
+  m_Name: Standard Test Wave
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: -8095522139125849403, guid: db443d1b232a8504f91abc1f1d7a838c, type: 3}
+  enemyCount: 5
+  spawnDelay: 1

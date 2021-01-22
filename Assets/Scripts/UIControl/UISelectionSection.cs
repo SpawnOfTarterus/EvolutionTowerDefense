@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace ETD.UIControl
 {
-    public enum actionTypes { None, Build, Evolve, Research };
+    public enum actionTypes { None, Build, Evolve, Research, Spawn };
 
     public class UISelectionSection : MonoBehaviour
     {
@@ -22,8 +22,9 @@ namespace ETD.UIControl
         [SerializeField] Button buildButton = null;
         [SerializeField] Button evolveButton = null;
         [SerializeField] Button researchButton = null;
-        [SerializeField] Building buildingToBuild;
+        [SerializeField] RectTransform spawnMenu = null;
 
+        GameObject buildingToBuild;
         UISelectionDescription lastSelected = null;
         UISelectionDescription selected = null;
         Color buttonColor;
@@ -31,6 +32,7 @@ namespace ETD.UIControl
 
         public void SetSelected(UISelectionDescription newSelected)
         {
+            FindObjectOfType<UISliderControl>().ForceCloseMenus();
             selected = newSelected;
             if(selected == null)
             {
@@ -38,6 +40,7 @@ namespace ETD.UIControl
                 lastSelected = null; 
                 return;
             }
+            PostBuildingRedirect(selected);
             SetEnableSelectionUI(true);
         }
 
@@ -52,7 +55,48 @@ namespace ETD.UIControl
         {
             if (selected != lastSelected)
             {
+                buildButton.onClick.RemoveAllListeners();
                 UpdateSelectionInformation(selected);
+            }
+        }
+
+        private void PostBuildingRedirect(UISelectionDescription uISDtoSwitch)
+        {
+            CheckForResearchCenter(uISDtoSwitch);
+            CheckForUpgradeCenter(uISDtoSwitch);
+            CheckForEnemyBreeder(uISDtoSwitch);
+        }
+
+        private void CheckForResearchCenter(UISelectionDescription uISDtoSwitch)
+        {
+            if (uISDtoSwitch.GetBuildingType() == buildingTypes.ResearchCenter)
+            {
+                if (FindObjectOfType<ResearchCenter>())
+                {
+                    selected = FindObjectOfType<ResearchCenter>().GetComponent<UISelectionDescription>();
+                }
+            }
+        }
+
+        private void CheckForUpgradeCenter(UISelectionDescription uISDtoSwitch)
+        {
+            if (uISDtoSwitch.GetBuildingType() == buildingTypes.UpgradeCenter)
+            {
+                if (FindObjectOfType<UpgradeCenter>())
+                {
+                    selected = FindObjectOfType<UpgradeCenter>().GetComponent<UISelectionDescription>();
+                }
+            }
+        }
+
+        private void CheckForEnemyBreeder(UISelectionDescription uISDtoSwitch)
+        {
+            if (uISDtoSwitch.GetBuildingType() == buildingTypes.EnemyBreeder)
+            {
+                if (FindObjectOfType<EnemyBreeder>())
+                {
+                    selected = FindObjectOfType<EnemyBreeder>().GetComponent<UISelectionDescription>();
+                }
             }
         }
 
@@ -63,17 +107,30 @@ namespace ETD.UIControl
             selectedImageRef.sprite = information.GetMyImage();
             statisticTextRef.text = information.GetMyStatistics();
             descriptiveTextRef.text = information.GetMyDescription();
-            costTextRef.text = information.GetActionCost();
-            ButtonControl(information.GetActionType());
-            buildingToBuild = information.GetBuildingPrefab();
-            BuildingSpawner spawner = FindObjectOfType<BuildingSpawner>();
-            buildButton.onClick.AddListener(Build);
+            DisplayCost(information);
+            ButtonControl(information);
             lastSelected = selected;
+        }
+
+        private void BuildButtonDisplayControl(UISelectionDescription information)
+        {
+            if (information.GetActionType() == actionTypes.Build)
+            {
+                buildButton.onClick.AddListener(Build);
+                buildingToBuild = information.GetBuildingPrefab();
+                BuildingSpawner spawner = FindObjectOfType<BuildingSpawner>();
+            }
+            if (information.GetActionType() == actionTypes.Spawn) { buildButton.onClick.AddListener(Spawn); }
         }
 
         private void Build()
         {
-            FindObjectOfType<BuildingSpawner>().DisplayBuildingToSpawn(buildingToBuild);
+            FindObjectOfType<BuildingSpawner>().DisplayBuildingToSpawn(buildingToBuild.GetComponent<Building>());
+        }
+
+        private void Spawn()
+        {
+            FindObjectOfType<UISliderControl>().ToggleMenu(spawnMenu);
         }
 
         private void SetEnableSelectionUI(bool status)
@@ -81,13 +138,31 @@ namespace ETD.UIControl
             gameObject.SetActive(status);
         }
 
-        private void ButtonControl(actionTypes action)
+        private void DisplayCost(UISelectionDescription information)
         {
-            if(action == actionTypes.Build)
+            if(information.GetActionType() == actionTypes.Build)
+            {
+                costTextRef.text = $"Build \nCost - {information.GetBuildCost()}";
+            }
+            else if(information.GetActionType() == actionTypes.Spawn)
+            {
+                costTextRef.text = $"Spawn";
+            }
+            else
+            {
+                costTextRef.text = $"Build";
+            }
+        }
+
+        private void ButtonControl(UISelectionDescription information)
+        {
+            actionTypes action = information.GetActionType();
+            if(action == actionTypes.Build || action == actionTypes.Spawn)
             {
                 SetButtonColorAndActiveStatus(buildButton, true);
                 SetButtonColorAndActiveStatus(evolveButton, false);
                 SetButtonColorAndActiveStatus(researchButton, false);
+                BuildButtonDisplayControl(information);
             }
             if (action == actionTypes.Evolve)
             {
