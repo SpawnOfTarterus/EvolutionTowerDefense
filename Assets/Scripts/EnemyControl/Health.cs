@@ -24,6 +24,7 @@ namespace ETD.EnemyControl
 
         public void TakeDamage(int damage)
         {
+            Debug.Log($"Final Damage = {damage}");
             currentHealth -= damage;
             if(currentHealth <= 0)
             {

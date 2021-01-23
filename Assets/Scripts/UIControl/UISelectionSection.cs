@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 namespace ETD.UIControl
 {
-    public enum actionTypes { None, Build, Evolve, Research, Spawn };
-
     public class UISelectionSection : MonoBehaviour
     {
         [Header("UI References")]
@@ -23,19 +21,23 @@ namespace ETD.UIControl
         [SerializeField] Button evolveButton = null;
         [SerializeField] Button researchButton = null;
         [SerializeField] RectTransform spawnMenu = null;
+        [SerializeField] UIEvolutionMenu evolutionMenu = null;
 
         GameObject buildingToBuild;
         UISelectionDescription lastSelected = null;
         UISelectionDescription selected = null;
         Color buttonColor;
         Color disabledButtonColor = new Color(0.1509434f, 0.1509434f, 0.1509434f);
+        public bool isEvolving = false;
+        Tower towerEvolving = null;
 
-        public void SetSelected(UISelectionDescription newSelected)
+        public void SetSelected(UISelectionDescription newSelected, bool evolutionSelected)
         {
-            FindObjectOfType<UISliderControl>().ForceCloseMenus();
+            if (!evolutionSelected) { FindObjectOfType<UISliderControl>().ForceCloseMenus(); }
             selected = newSelected;
             if(selected == null)
             {
+                isEvolving = false;
                 SetEnableSelectionUI(false); 
                 lastSelected = null; 
                 return;
@@ -58,6 +60,12 @@ namespace ETD.UIControl
                 buildButton.onClick.RemoveAllListeners();
                 UpdateSelectionInformation(selected);
             }
+        }
+
+        public void ToggleIsEvolving()
+        {
+            isEvolving = !isEvolving;
+            if(isEvolving) { towerEvolving = selected.GetComponent<Tower>(); }
         }
 
         private void PostBuildingRedirect(UISelectionDescription uISDtoSwitch)
@@ -102,14 +110,27 @@ namespace ETD.UIControl
 
         public void UpdateSelectionInformation(UISelectionDescription information)
         {
-            selectedTypeRef.text = information.GetMyType();
+            DisplayType(information);
             selectedNameRef.text = information.GetMyName();
             selectedImageRef.sprite = information.GetMyImage();
             statisticTextRef.text = information.GetMyStatistics();
             descriptiveTextRef.text = information.GetMyDescription();
             DisplayCost(information);
             ButtonControl(information);
+            if (selected.GetComponent<Tower>() && !isEvolving) { evolutionMenu.SetButtons(selected); }
             lastSelected = selected;
+        }
+
+        private void DisplayType(UISelectionDescription information)
+        {
+            if(information.GetMyType() == EvoTypes.None)
+            {
+                selectedTypeRef.text = "Building";
+            }
+            else
+            {
+                selectedTypeRef.text = information.GetMyType().ToString();
+            }
         }
 
         private void BuildButtonDisplayControl(UISelectionDescription information)
@@ -154,6 +175,16 @@ namespace ETD.UIControl
             }
         }
 
+        private void EvolveButtonDisplayControl(UISelectionDescription information)
+        {
+            evolveButton.onClick.RemoveAllListeners();
+            if(isEvolving)
+            {
+                Tower newEvo = information.GetComponent<Tower>();
+                evolveButton.onClick.AddListener(delegate { towerEvolving.Evolve(newEvo); });
+            }
+        }
+
         private void ButtonControl(UISelectionDescription information)
         {
             actionTypes action = information.GetActionType();
@@ -169,6 +200,7 @@ namespace ETD.UIControl
                 SetButtonColorAndActiveStatus(buildButton, false);
                 SetButtonColorAndActiveStatus(evolveButton, true);
                 SetButtonColorAndActiveStatus(researchButton, false);
+                EvolveButtonDisplayControl(information);
             }
             if (action == actionTypes.Research)
             {

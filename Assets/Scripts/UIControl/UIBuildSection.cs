@@ -1,3 +1,4 @@
+using ETD.UIControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,19 @@ public class UIBuildSection : MonoBehaviour
     [SerializeField] Button researchCenterbutton = null;
     [SerializeField] Button upgradeCenterbutton = null;
     [SerializeField] Button enemyBreederbutton = null;
+    [SerializeField] UISelectionSection selectionSection = null;
 
-    public void SelectBuildingInstead()
+    private void Start()
     {
-        Debug.Log("this was called.");
-        researchCenterbutton.onClick.RemoveAllListeners();
+        towerbutton.onClick.AddListener
+            (delegate { selectionSection.SetSelected(towerbutton.GetComponent<UISelectionDescription>(), false); });
+        researchCenterbutton.onClick.AddListener
+            (delegate { selectionSection.SetSelected(researchCenterbutton.GetComponent<UISelectionDescription>(), false); });
+        upgradeCenterbutton.onClick.AddListener
+            (delegate { selectionSection.SetSelected(upgradeCenterbutton.GetComponent<UISelectionDescription>(), false); });
+        enemyBreederbutton.onClick.AddListener
+            (delegate { selectionSection.SetSelected(enemyBreederbutton.GetComponent<UISelectionDescription>(), false); });
     }
-
-
 
 
 }

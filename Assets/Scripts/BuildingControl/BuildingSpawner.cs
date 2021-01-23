@@ -134,7 +134,7 @@ namespace ETD.BuildingControl
             if(!lastBuildingDisplayed.GetComponent<Tower>())
             {
                 FindObjectOfType<UISelectionSection>().SetSelected
-                    (lastBuildingDisplayed.GetComponent<UISelectionDescription>());
+                    (lastBuildingDisplayed.GetComponent<UISelectionDescription>(), false);
                 FindObjectOfType<SelectionHandler>().SetIsBuilding(false);
                 yield break;
             }
@@ -164,5 +164,15 @@ namespace ETD.BuildingControl
             }
         }
 
+        public void EvolveSelectedTower(Tower oldTower, Tower newTower)
+        {
+            Vector3 spawnPos = oldTower.transform.position;
+            Destroy(oldTower.gameObject);
+            Tower evolvedTower = Instantiate(newTower, spawnPos, transform.rotation, towerParent);
+            evolvedTower.GetComponent<Building>().SetAsBuilt();
+            evolvedTower.GetComponent<Attacker>().SetProjectileParent(projectileParent);
+            evolvedTower.GetComponent<GridControl>().SetShowGrid(false);
+            FindObjectOfType<UISelectionSection>().SetSelected(evolvedTower.GetComponent<UISelectionDescription>(), false);
+        }
     }
 }

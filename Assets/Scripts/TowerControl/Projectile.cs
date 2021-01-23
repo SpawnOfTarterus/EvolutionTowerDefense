@@ -9,12 +9,18 @@ namespace ETD.TowerControl
     {
         [SerializeField] float moveSpeed = 1f;
 
-        int damage;
+        float damage;
+        EvoTypes parentType;
         Enemy target;
 
-        public void SetDamage(int newDamage)
+        public void SetDamage(float newDamage)
         {
             damage = newDamage;
+        }
+
+        public void SetParentType(EvoTypes type)
+        {
+            parentType = type;
         }
 
         public void SetTarget(Enemy newTarget)
@@ -46,7 +52,8 @@ namespace ETD.TowerControl
 
         private void OnTriggerEnter(Collider other)
         {
-            other.GetComponent<Health>().TakeDamage(damage);
+            gameObject.SetActive(false);
+            other.GetComponent<DefenceApplicator>().ApplyDamageReduction(damage, parentType);
             Destroy(gameObject);
         }
     }

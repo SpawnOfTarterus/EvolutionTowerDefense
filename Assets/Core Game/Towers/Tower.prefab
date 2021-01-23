@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 263332073307771583}
   - component: {fileID: 5219468649104457516}
   - component: {fileID: -5827082499017162639}
+  - component: {fileID: 3309330547370225557}
   - component: {fileID: 6915345797596645295}
   m_Layer: 0
   m_Name: Tower
@@ -287,7 +288,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 573cc7dcb98c4ca4ab0529cce97a2a10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  costToBuild: 0
   isBuilt: 0
   buildIndicator: {fileID: 1357276988348317994}
 --- !u!114 &-5827082499017162639
@@ -306,6 +306,18 @@ MonoBehaviour:
   range: 0
   timeBetweenAttacks: 0
   projectile: {fileID: 4886786594719467993, guid: dea38a8d73222384ca8c4fe25de41590, type: 3}
+--- !u!114 &3309330547370225557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3150832585156135373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952c258952c6a8042987705b8352c28c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6915345797596645295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,11 +330,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1adc7c858c6e3364cb2a43fb1de6c96e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myType: No Type
+  myType: 0
   myName: No Name
   myImage: {fileID: 0}
-  actionCost: No Cost
+  buildCost: 0
   actionType: 2
+  possibleEvolutions: []
+  buildingType: 0
   myStatistics: No stats.
   myDescription: No description.
   buildingPrefab: {fileID: 0}

@@ -125,6 +125,8 @@ GameObject:
   - component: {fileID: -8095522139125849403}
   - component: {fileID: 1714368694290614614}
   - component: {fileID: -5871033178804031172}
+  - component: {fileID: 4974586392630357151}
+  - component: {fileID: 1115612874488324780}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -228,3 +230,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 5
   currentHealth: 0
+--- !u!114 &4974586392630357151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7215606545805730527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b78b3230afb8e3419724996458dbbe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1115612874488324780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7215606545805730527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adc7c858c6e3364cb2a43fb1de6c96e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myType: 0
+  myName: Basic Enemy
+  myImage: {fileID: 21300000, guid: e7a642b7bde0cad418b3ffaeb688008f, type: 3}
+  buildCost: 0
+  actionType: 0
+  possibleEvolutions: []
+  buildingType: 0
+  myStatistics: No stats.
+  myDescription: No Description.
+  buildingPrefab: {fileID: 0}

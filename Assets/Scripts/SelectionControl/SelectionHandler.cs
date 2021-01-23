@@ -41,11 +41,11 @@ namespace ETD.SelectionControl
                     if(!hit.collider.gameObject.GetComponent<UISelectionDescription>())
                     {
                         currentSelection = null;
-                        selectionSection.SetSelected(currentSelection);
+                        selectionSection.SetSelected(currentSelection, false);
                         return;
                     }
                     currentSelection = hit.collider.gameObject.GetComponent<UISelectionDescription>();
-                    selectionSection.SetSelected(currentSelection);
+                    selectionSection.SetSelected(currentSelection, false);
                 }
             }
         }

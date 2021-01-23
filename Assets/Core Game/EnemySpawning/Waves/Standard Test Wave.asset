@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501dbebe6ad71214d98821cebacda238, type: 3}
   m_Name: Standard Test Wave
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: -8095522139125849403, guid: db443d1b232a8504f91abc1f1d7a838c, type: 3}
+  enemyPrefab: {fileID: 5712297134027041380, guid: 0ce1726eed5067e4491cf631eb2f5dea, type: 3}
   enemyCount: 5
   spawnDelay: 1

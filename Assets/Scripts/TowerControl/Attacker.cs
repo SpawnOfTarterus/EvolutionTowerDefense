@@ -1,4 +1,5 @@
 using ETD.EnemyControl;
+using ETD.UIControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -85,9 +86,14 @@ namespace ETD.TowerControl
             attackTimer += Time.deltaTime;
             if (attackTimer >= timeBetweenAttacks)
             {
+                Debug.Log($"Base Damage = {damage}");
                 Projectile projectileInstance = Instantiate(projectile, transform.position, Quaternion.identity, projectileParent);
+                float processedDamage = GetComponent<DamageModifier>().CalculateDamageForProjectile
+                    (damage, GetComponent<UISelectionDescription>().GetMyType(), target.GetComponent<UISelectionDescription>().GetMyType());
+                Debug.Log($"Modified Damage = {processedDamage}");
                 projectileInstance.SetTarget(target);
-                projectileInstance.SetDamage(damage);
+                projectileInstance.SetDamage(processedDamage);
+                projectile.SetParentType(GetComponent<UISelectionDescription>().GetMyType());
                 attackTimer = 0f;
             }
         }

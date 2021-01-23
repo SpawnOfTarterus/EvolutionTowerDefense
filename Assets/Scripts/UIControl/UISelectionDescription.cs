@@ -8,16 +8,15 @@ using UnityEngine.UI;
 
 namespace ETD.UIControl
 {
-    public enum buildingTypes { Tower, ResearchCenter, UpgradeCenter, EnemyBreeder};
-
     public class UISelectionDescription : MonoBehaviour
     {
         [Header("Unique Information")]
-        [SerializeField] string myType = "No Type";
+        [SerializeField] EvoTypes myType = EvoTypes.None;
         [SerializeField] string myName = "No Name";
         [SerializeField] Sprite myImage = null;
         [SerializeField] int buildCost = 0;
         [SerializeField] actionTypes actionType = actionTypes.None;
+        [SerializeField] Tower[] possibleEvolutions;
         [SerializeField] buildingTypes buildingType = buildingTypes.Tower;
         [TextArea]
         [SerializeField] string myStatistics = "No stats.";
@@ -25,7 +24,7 @@ namespace ETD.UIControl
         [SerializeField] string myDescription = "No description.";
         [SerializeField] GameObject buildingPrefab = null;
         
-        public string GetMyType() { return myType; }
+        public EvoTypes GetMyType() { return myType; }
         public string GetMyName() { return myName; }
         public Sprite GetMyImage() { return myImage; }
         public int GetBuildCost() { return buildCost; }
@@ -34,6 +33,11 @@ namespace ETD.UIControl
         public string GetMyStatistics() { return myStatistics; }
         public string GetMyDescription() { return myDescription; }
         public GameObject GetBuildingPrefab() { return buildingPrefab; }
+
+        public Tower[] GetPossibleEvolutions()
+        {
+            return possibleEvolutions;
+        }
 
         private void Start()
         {
