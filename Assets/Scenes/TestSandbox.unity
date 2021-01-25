@@ -1246,7 +1246,7 @@ Transform:
   - {fileID: 1946155660}
   - {fileID: 1942594873}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1708509398
 GameObject:
@@ -1511,7 +1511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1181554283260743642, guid: 756abe6aa94302741bbb965fb8ffa0cf, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1181554283260743642, guid: 756abe6aa94302741bbb965fb8ffa0cf, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1735,7 +1735,7 @@ PrefabInstance:
     - target: {fileID: 5795165021796670770, guid: e61b69f6ea21d734582e30ab950f0626, type: 3}
       propertyPath: waves.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 7b1443afe3c25b74195ebdb33157118d, type: 2}
+      objectReference: {fileID: 11400000, guid: 916fdb6863fc90f4298e296d0d6e3f78, type: 2}
     - target: {fileID: 5795165021796670770, guid: e61b69f6ea21d734582e30ab950f0626, type: 3}
       propertyPath: waves.Array.data[1]
       value: 

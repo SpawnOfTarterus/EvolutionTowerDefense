@@ -15,8 +15,8 @@ namespace ETD.TowerControl
         [SerializeField] int numberCanAttack = 1;
 
         Transform projectileParent;
-        Enemy primaryTarget;
-        Enemy[] targets;
+        List<Enemy> potentialTargets = new List<Enemy>();
+        List<Enemy> currentTargets = new List<Enemy>();
         float attackTimer = Mathf.Infinity;
 
         public void SetProjectileParent(Transform parent)
@@ -26,7 +26,7 @@ namespace ETD.TowerControl
 
         public Enemy GetCurrentTarget()
         {
-            return primaryTarget;
+            return currentTargets[0];
         }
 
         public int GetDamage()
@@ -51,56 +51,80 @@ namespace ETD.TowerControl
 
         private void AttackMechanic()
         {
-            GetTarget();
-            if (!IsTargetInRange()) { return; }
-            AttackTarget();
+            GetTargets();
+            AttackTargets();
         }
 
-        private void GetTarget()
+        private void GetTargets()
+        {
+            FindTargets();
+            SelectTargets();
+        }
+
+        private void SelectTargets()
+        {
+            if(potentialTargets.Count == 0) { return; }
+            Enemy newTarget = GetClosestEnemy();
+            if(newTarget == null) { return; }
+            if(currentTargets.Count < numberCanAttack) { currentTargets.Add(newTarget); }
+        }
+
+        private void FindTargets()
         {
             Enemy[] enemies = FindObjectsOfType<Enemy>();
             foreach (Enemy enemy in enemies)
             {
-                if (Vector3.Distance(enemy.transform.position, transform.position) > range) { continue; }
-                if (primaryTarget != null)
+                float distanceToEnemy = Vector3.Distance(enemy.transform.position, transform.position);
+                if (distanceToEnemy > range)
                 {
-                    if (Vector3.Distance(enemy.transform.position, transform.position) <
-                        Vector3.Distance(enemy.transform.position, primaryTarget.transform.position))
-                    {
-                        primaryTarget = enemy;
-                    }
+                    if (potentialTargets.Contains(enemy)) { potentialTargets.Remove(enemy); }
+                    if (currentTargets.Contains(enemy)) { currentTargets.Remove(enemy); }
                 }
-                else
+                else if (distanceToEnemy <= range)
                 {
-                    primaryTarget = enemy;
+                    if (!potentialTargets.Contains(enemy)) { potentialTargets.Add(enemy); }
                 }
             }
         }
 
-        private bool IsTargetInRange()
+        public void RemoveFromTargetLists(Enemy enemy)
         {
-            if (primaryTarget == null) { return false; }
-            if (Vector3.Distance(primaryTarget.transform.position, transform.position) > range)
-            {
-                primaryTarget = null;
-                return false;
-            }
-            return true;
+            potentialTargets.Remove(enemy);
+            currentTargets.Remove(enemy);
         }
 
-        private void AttackTarget()
+        private Enemy GetClosestEnemy()
+        {
+            Enemy closestEnemy = null;
+            foreach(Enemy enemy in potentialTargets)
+            {
+                if(currentTargets.Contains(enemy)) { continue; }
+                if(closestEnemy == null) { closestEnemy = enemy; }
+                if(Vector3.Distance(transform.position, enemy.transform.position) < Vector3.Distance(transform.position, closestEnemy.transform.position))
+                {
+                    closestEnemy = enemy;
+                }
+            }
+            return closestEnemy;
+        }
+
+        private void AttackTargets()
         {
             attackTimer += Time.deltaTime;
             if (attackTimer >= timeBetweenAttacks)
             {
-                Projectile projectileInstance = Instantiate(projectile, transform.position, Quaternion.identity, projectileParent);
-                float processedDamage = GetComponent<DamageModifier>().CalculateDamageForProjectile
-                    (damage, GetComponent<UISelectionDescription>().GetMyType(), primaryTarget.GetComponent<UISelectionDescription>().GetMyType());
-                projectileInstance.SetTarget(primaryTarget);
-                projectileInstance.SetDamage(processedDamage);
-                projectileInstance.SetParentType(GetComponent<UISelectionDescription>().GetMyType());
-                projectileInstance.SetAttacker(GetComponent<DamageModifier>());
-                attackTimer = 0f;
+                if(currentTargets.Count == 0) { return; }
+                foreach(Enemy target in currentTargets)
+                {
+                    Projectile projectileInstance = Instantiate(projectile, transform.position, Quaternion.identity, projectileParent);
+                    float processedDamage = GetComponent<DamageModifier>().CalculateDamageForProjectile
+                        (damage, GetComponent<UISelectionDescription>().GetMyType(), target.GetComponent<UISelectionDescription>().GetMyType());
+                    projectileInstance.SetTarget(target);
+                    projectileInstance.SetDamage(processedDamage);
+                    projectileInstance.SetParentType(GetComponent<UISelectionDescription>().GetMyType());
+                    projectileInstance.SetAttacker(GetComponent<DamageModifier>());
+                    attackTimer = 0f;
+                }
             }
         }
 

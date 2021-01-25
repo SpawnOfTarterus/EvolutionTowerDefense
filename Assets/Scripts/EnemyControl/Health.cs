@@ -1,4 +1,5 @@
 using ETD.PlayerControl;
+using ETD.TowerControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,8 @@ namespace ETD.EnemyControl
         [SerializeField] int currentHealth;
 
         bool isDead = false;
-        statusEffects currentStatusEffect;
         Coroutine poisonCo;
+        Attacker myAttacker;
 
         public int GetMaxHealth()
         {
@@ -41,11 +42,11 @@ namespace ETD.EnemyControl
                 LoseHealth(attacker.GetStatusEffectDamage());
                 Debug.Log("Taking Poison Damage");
             }
-            currentStatusEffect = statusEffects.None;
         }
 
         public void TakeDamage(int damage, DamageModifier attacker)
         {
+            myAttacker = attacker.GetComponent<Attacker>();
             if (attacker.GetStatusEffect() != statusEffects.None) { ApplyStatusEffect(attacker); }
             LoseHealth(damage);
         }
@@ -64,6 +65,7 @@ namespace ETD.EnemyControl
         {
             if(isDead) { return; }
             isDead = true;
+            myAttacker.RemoveFromTargetLists(GetComponent<Enemy>());
             Enemy enemyComponent = GetComponent<Enemy>();
             enemyComponent.GetMySpawner().RemoveFromEnemiesInPlay(enemyComponent);
             if(currentHealth == 0)
