@@ -5,7 +5,8 @@ using UnityEngine;
 
 public enum buildingTypes { Tower, ResearchCenter, UpgradeCenter, EnemyBreeder };
 public enum actionTypes { None, Build, Evolve, Research, Spawn };
-public enum EvoTypes { None, Human, Beast, Undead, Goblinkin};
+public enum evoTypes { None, Human, Beast, Undead, Goblinkin};
+public enum statusEffects { None, Poisoned, Burned, Frozen}
 
 public static class PublicEnums
 {

@@ -33,11 +33,10 @@ namespace ETD.UIControl
 
         public void SetSelected(UISelectionDescription newSelected, bool evolutionSelected)
         {
-            if (!evolutionSelected) { FindObjectOfType<UISliderControl>().ForceCloseMenus(); }
+            if (!evolutionSelected) { FindObjectOfType<UISliderControl>().ForceCloseMenus(); isEvolving = false; }
             selected = newSelected;
             if(selected == null)
             {
-                isEvolving = false;
                 SetEnableSelectionUI(false); 
                 lastSelected = null; 
                 return;
@@ -123,7 +122,7 @@ namespace ETD.UIControl
 
         private void DisplayType(UISelectionDescription information)
         {
-            if(information.GetMyType() == EvoTypes.None)
+            if(information.GetMyType() == evoTypes.None)
             {
                 selectedTypeRef.text = "Building";
             }

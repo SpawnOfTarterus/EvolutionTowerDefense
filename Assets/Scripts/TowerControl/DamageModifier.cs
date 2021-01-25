@@ -5,43 +5,92 @@ using UnityEngine;
 
 public class DamageModifier : MonoBehaviour
 {
+    [Header("Crit Control")]
+    [SerializeField] bool canCrit;
+    [SerializeField] float critMultiplier;
+    [SerializeField] float critChanceOneIn;
+    [Header("Range Damage Control")]
+    [SerializeField] bool damageIncreasedByDistance;
+    [Header("Status Effect Control")]
+    [SerializeField] statusEffects statusEffectToInflict;
+    [SerializeField] int statusEffectDamagePerSecond;
+    [SerializeField] int statusEffectLifeTimeInSeconds;
+
     float half = 0.5f;
     float quarter = 0.25f;
     float processedDamage;
 
-    public float CalculateDamageForProjectile(int rawDamage, EvoTypes attackerType, EvoTypes targetType)
-    {
-        return ProcessChangeForType(rawDamage, attackerType, targetType);
-    }
+    public statusEffects GetStatusEffect() { return statusEffectToInflict; }
+    public int GetStatusEffectDamage() { return statusEffectDamagePerSecond; }
+    public int GetStatusEffectLifeTime() { return statusEffectLifeTimeInSeconds; }
 
-    private float ProcessChangeForType(int rawDamage, EvoTypes attackerType, EvoTypes targetType)
+    public float CalculateDamageForProjectile(int rawDamage, evoTypes attackerType, evoTypes targetType)
     {
-        if(attackerType == EvoTypes.Human) { processedDamage = ProcessHumanAttack(rawDamage, targetType); }
-        else if (attackerType == EvoTypes.Beast) { processedDamage = ProcessBeastAttack(rawDamage, targetType); }
-        else if (attackerType == EvoTypes.Undead) { processedDamage = ProcessUndeadAttack(rawDamage, targetType); }
-        else if (attackerType == EvoTypes.Goblinkin) { processedDamage = ProcessGoblinkinAttack(rawDamage, targetType); }
+        ProcessChangeForType(rawDamage, attackerType, targetType);
+        ProcessChangeForAbilities();
+        Debug.Log(processedDamage);
         return processedDamage;
     }
 
-    private float ProcessHumanAttack(float rawDamage, EvoTypes targetType)
+    private void ProcessChangeForType(int rawDamage, evoTypes attackerType, evoTypes targetType)
+    {
+        if(attackerType == evoTypes.Human) { processedDamage = ProcessHumanAttack(rawDamage, targetType); }
+        else if (attackerType == evoTypes.Beast) { processedDamage = ProcessBeastAttack(rawDamage, targetType); }
+        else if (attackerType == evoTypes.Undead) { processedDamage = ProcessUndeadAttack(rawDamage, targetType); }
+        else if (attackerType == evoTypes.Goblinkin) { processedDamage = ProcessGoblinkinAttack(rawDamage, targetType); }
+        else { processedDamage = rawDamage; }
+    }
+
+    private void ProcessChangeForAbilities()
+    {
+        ProcessChangeForRange();
+        ProcessChangeForCrit();
+    }
+
+    private void ProcessChangeForRange()
+    {
+        if (damageIncreasedByDistance)
+        {
+            float distanceToTarget = Vector3.Distance
+                (transform.position, GetComponent<Attacker>().GetCurrentTarget().transform.position);
+            processedDamage *= Mathf.Max
+                (1, distanceToTarget / (GetComponent<Attacker>().GetRange() * half));
+            //any distance <= half the range = 1x damage. Any distance > half the range = up to 2x damage at full range.
+        }
+    }
+
+    private void ProcessChangeForCrit()
+    {
+        if (canCrit) 
+        { 
+            //0.5 is used to start and added to the end to give 1 and 4 an equal chance to roll as 2 and 3.
+            //mathf.epsilon is used to prevent 5 from being rolled.
+            if(Mathf.RoundToInt(Random.Range(0.5f, critChanceOneIn + (0.5f - Mathf.Epsilon))) == 1)
+            {
+                processedDamage *= critMultiplier;
+            }
+        }
+    }
+
+    private float ProcessHumanAttack(float rawDamage, evoTypes targetType)
     {
         return rawDamage - (rawDamage * quarter);
     }
 
-    private float ProcessBeastAttack(float rawDamage, EvoTypes targetType)
+    private float ProcessBeastAttack(float rawDamage, evoTypes targetType)
     {
-        if (targetType == EvoTypes.Undead) { return rawDamage + (rawDamage * half); }
+        if (targetType == evoTypes.Undead) { return rawDamage + (rawDamage * half); }
         else { return rawDamage; }
     }
 
-    private float ProcessUndeadAttack(float rawDamage, EvoTypes targetType)
+    private float ProcessUndeadAttack(float rawDamage, evoTypes targetType)
     {
-        if (targetType == EvoTypes.Human) { return rawDamage + (rawDamage * quarter); }
-        if (targetType == EvoTypes.Goblinkin) { return rawDamage + (rawDamage * quarter); }
+        if (targetType == evoTypes.Human) { return rawDamage + (rawDamage * quarter); }
+        if (targetType == evoTypes.Goblinkin) { return rawDamage + (rawDamage * quarter); }
         else { return rawDamage; }
     }
 
-    private float ProcessGoblinkinAttack(float rawDamage, EvoTypes targetType)
+    private float ProcessGoblinkinAttack(float rawDamage, evoTypes targetType)
     {
         return rawDamage; 
     }

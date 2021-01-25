@@ -12,14 +12,21 @@ namespace ETD.TowerControl
         [SerializeField] float range;
         [SerializeField] float timeBetweenAttacks;
         [SerializeField] Projectile projectile;
+        [SerializeField] int numberCanAttack = 1;
 
         Transform projectileParent;
-        Enemy target;
+        Enemy primaryTarget;
+        Enemy[] targets;
         float attackTimer = Mathf.Infinity;
 
         public void SetProjectileParent(Transform parent)
         {
             projectileParent = parent;
+        }
+
+        public Enemy GetCurrentTarget()
+        {
+            return primaryTarget;
         }
 
         public int GetDamage()
@@ -55,27 +62,27 @@ namespace ETD.TowerControl
             foreach (Enemy enemy in enemies)
             {
                 if (Vector3.Distance(enemy.transform.position, transform.position) > range) { continue; }
-                if (target != null)
+                if (primaryTarget != null)
                 {
                     if (Vector3.Distance(enemy.transform.position, transform.position) <
-                        Vector3.Distance(enemy.transform.position, target.transform.position))
+                        Vector3.Distance(enemy.transform.position, primaryTarget.transform.position))
                     {
-                        target = enemy;
+                        primaryTarget = enemy;
                     }
                 }
                 else
                 {
-                    target = enemy;
+                    primaryTarget = enemy;
                 }
             }
         }
 
         private bool IsTargetInRange()
         {
-            if (target == null) { return false; }
-            if (Vector3.Distance(target.transform.position, transform.position) > range)
+            if (primaryTarget == null) { return false; }
+            if (Vector3.Distance(primaryTarget.transform.position, transform.position) > range)
             {
-                target = null;
+                primaryTarget = null;
                 return false;
             }
             return true;
@@ -86,14 +93,13 @@ namespace ETD.TowerControl
             attackTimer += Time.deltaTime;
             if (attackTimer >= timeBetweenAttacks)
             {
-                Debug.Log($"Base Damage = {damage}");
                 Projectile projectileInstance = Instantiate(projectile, transform.position, Quaternion.identity, projectileParent);
                 float processedDamage = GetComponent<DamageModifier>().CalculateDamageForProjectile
-                    (damage, GetComponent<UISelectionDescription>().GetMyType(), target.GetComponent<UISelectionDescription>().GetMyType());
-                Debug.Log($"Modified Damage = {processedDamage}");
-                projectileInstance.SetTarget(target);
+                    (damage, GetComponent<UISelectionDescription>().GetMyType(), primaryTarget.GetComponent<UISelectionDescription>().GetMyType());
+                projectileInstance.SetTarget(primaryTarget);
                 projectileInstance.SetDamage(processedDamage);
-                projectile.SetParentType(GetComponent<UISelectionDescription>().GetMyType());
+                projectileInstance.SetParentType(GetComponent<UISelectionDescription>().GetMyType());
+                projectileInstance.SetAttacker(GetComponent<DamageModifier>());
                 attackTimer = 0f;
             }
         }

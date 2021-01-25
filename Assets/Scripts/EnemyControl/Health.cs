@@ -11,6 +11,8 @@ namespace ETD.EnemyControl
         [SerializeField] int currentHealth;
 
         bool isDead = false;
+        statusEffects currentStatusEffect;
+        Coroutine poisonCo;
 
         public int GetMaxHealth()
         {
@@ -22,11 +24,36 @@ namespace ETD.EnemyControl
             currentHealth = maxHealth;
         }
 
-        public void TakeDamage(int damage)
+        private void ApplyStatusEffect(DamageModifier attacker)
         {
-            Debug.Log($"Final Damage = {damage}");
+            if(attacker.GetStatusEffect() == statusEffects.Poisoned) 
+            {
+                if (poisonCo != null) { StopCoroutine(poisonCo); }
+                poisonCo = StartCoroutine(ProcessPoison(attacker)); 
+            }
+        }
+
+        IEnumerator ProcessPoison(DamageModifier attacker)
+        {
+            for(int i = 0; i < attacker.GetStatusEffectLifeTime(); i++)
+            {
+                yield return new WaitForSeconds(1);
+                LoseHealth(attacker.GetStatusEffectDamage());
+                Debug.Log("Taking Poison Damage");
+            }
+            currentStatusEffect = statusEffects.None;
+        }
+
+        public void TakeDamage(int damage, DamageModifier attacker)
+        {
+            if (attacker.GetStatusEffect() != statusEffects.None) { ApplyStatusEffect(attacker); }
+            LoseHealth(damage);
+        }
+
+        private void LoseHealth(int damage)
+        {
             currentHealth -= damage;
-            if(currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 currentHealth = 0;
                 Die();

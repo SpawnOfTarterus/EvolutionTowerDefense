@@ -11,7 +11,7 @@ namespace ETD.UIControl
     public class UISelectionDescription : MonoBehaviour
     {
         [Header("Unique Information")]
-        [SerializeField] EvoTypes myType = EvoTypes.None;
+        [SerializeField] evoTypes myType = evoTypes.None;
         [SerializeField] string myName = "No Name";
         [SerializeField] Sprite myImage = null;
         [SerializeField] int buildCost = 0;
@@ -24,10 +24,14 @@ namespace ETD.UIControl
         [SerializeField] string myDescription = "No description.";
         [SerializeField] GameObject buildingPrefab = null;
         
-        public EvoTypes GetMyType() { return myType; }
+        public evoTypes GetMyType() { return myType; }
         public string GetMyName() { return myName; }
         public Sprite GetMyImage() { return myImage; }
-        public int GetBuildCost() { return buildCost; }
+        public int GetBuildCost() 
+        { 
+            if(myType == evoTypes.Human) { return Mathf.RoundToInt(buildCost - (buildCost * 0.25f)); }
+            return buildCost; 
+        }
         public actionTypes GetActionType() { return actionType; }
         public buildingTypes GetBuildingType() { return buildingType; }
         public string GetMyStatistics() { return myStatistics; }

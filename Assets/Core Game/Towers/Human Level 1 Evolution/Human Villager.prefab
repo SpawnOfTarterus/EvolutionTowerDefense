@@ -102,11 +102,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3150832585156135373, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: m_Name
-      value: Human Tower 2
+      value: Human Villager
       objectReference: {fileID: 0}
     - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: myName
-      value: Villager 2
+      value: Villager
       objectReference: {fileID: 0}
     - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: myType
@@ -118,12 +118,28 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: fecea4a0304c68646b23ef9f840740ca, type: 3}
     - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: buildCost
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: myDescription
       value: 'Villager''s are the first evolution of the Human tree. '
       objectReference: {fileID: 0}
+    - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
+      propertyPath: possibleEvolutions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
+      propertyPath: possibleEvolutions.Array.data[0]
+      value: 
+      objectReference: {fileID: 6009783591485254314, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
+    - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
+      propertyPath: possibleEvolutions.Array.data[1]
+      value: 
+      objectReference: {fileID: 4296883354667171667, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+    - target: {fileID: 6915345797596645295, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
+      propertyPath: possibleEvolutions.Array.data[2]
+      value: 
+      objectReference: {fileID: 7754541075083324247, guid: 4f6fb717069f0004b8c5186d1fe77b33, type: 3}
     - target: {fileID: 7334564156256015179, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: m_RootOrder
       value: 0
