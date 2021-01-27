@@ -32,6 +32,10 @@ namespace ETD.EnemyControl
                 if (poisonCo != null) { StopCoroutine(poisonCo); }
                 poisonCo = StartCoroutine(ProcessPoison(attacker)); 
             }
+            if(attacker.GetStatusEffect() == statusEffects.Stunned)
+            {
+                GetComponent<Mover>().ProcessStun(attacker);
+            }
         }
 
         IEnumerator ProcessPoison(DamageModifier attacker)
@@ -40,7 +44,6 @@ namespace ETD.EnemyControl
             {
                 yield return new WaitForSeconds(1);
                 LoseHealth(attacker.GetStatusEffectDamage());
-                Debug.Log("Taking Poison Damage");
             }
         }
 

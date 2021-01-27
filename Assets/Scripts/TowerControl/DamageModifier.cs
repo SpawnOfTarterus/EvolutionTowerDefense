@@ -5,16 +5,18 @@ using UnityEngine;
 
 public class DamageModifier : MonoBehaviour
 {
-    [Header("Crit Control")]
+    [Header("Crit & Stun Control")]
     [SerializeField] bool canCrit;
     [SerializeField] float critMultiplier;
-    [SerializeField] float critChanceOneIn;
+    [SerializeField] float critAndStunChanceOneIn;
     [Header("Range Damage Control")]
     [SerializeField] bool damageIncreasedByDistance;
     [Header("Status Effect Control")]
     [SerializeField] statusEffects statusEffectToInflict;
     [SerializeField] int statusEffectDamagePerSecond;
     [SerializeField] int statusEffectLifeTimeInSeconds;
+    [SerializeField] float statusEffectRange;
+    [SerializeField] bool isPassive;
 
     float half = 0.5f;
     float quarter = 0.25f;
@@ -23,12 +25,14 @@ public class DamageModifier : MonoBehaviour
     public statusEffects GetStatusEffect() { return statusEffectToInflict; }
     public int GetStatusEffectDamage() { return statusEffectDamagePerSecond; }
     public int GetStatusEffectLifeTime() { return statusEffectLifeTimeInSeconds; }
+    public float GetStatusEffectRange() { return statusEffectRange; }
+    public bool IsStatusEffectPassive() { return isPassive; }
+    public float GetStunChance() { return critAndStunChanceOneIn; }
 
     public float CalculateDamageForProjectile(int rawDamage, evoTypes attackerType, evoTypes targetType)
     {
         ProcessChangeForType(rawDamage, attackerType, targetType);
         ProcessChangeForAbilities();
-        Debug.Log(processedDamage);
         return processedDamage;
     }
 
@@ -65,7 +69,7 @@ public class DamageModifier : MonoBehaviour
         { 
             //0.5 is used to start and added to the end to give 1 and 4 an equal chance to roll as 2 and 3.
             //mathf.epsilon is used to prevent 5 from being rolled.
-            if(Mathf.RoundToInt(Random.Range(0.5f, critChanceOneIn + (0.5f - Mathf.Epsilon))) == 1)
+            if(Mathf.RoundToInt(Random.Range(0.5f, critAndStunChanceOneIn + (0.5f - Mathf.Epsilon))) == 1)
             {
                 processedDamage *= critMultiplier;
             }

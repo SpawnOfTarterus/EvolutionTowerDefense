@@ -11,6 +11,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human Knight
       objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: statusEffectToInflict
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: critAndStunChanceOneIn
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: statusEffectLifeTimeInSeconds
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5170172519573616859, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -79,5 +79,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human Warrior
       objectReference: {fileID: 0}
+    - target: {fileID: 5484144964479021263, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}
+      propertyPath: isPassive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484144964479021263, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}
+      propertyPath: statusEffectRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484144964479021263, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}
+      propertyPath: statusEffectToInflict
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}

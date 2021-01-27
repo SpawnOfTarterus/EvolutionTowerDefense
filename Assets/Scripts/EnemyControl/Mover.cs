@@ -18,6 +18,7 @@ namespace ETD.EnemyControl
         Waypoint[] waypoints;
         int nextWaypointIndex = 0;
         bool isFinished = false;
+        bool isStunned = false;
 
         public float GetMoveSpeed()
         {
@@ -38,6 +39,7 @@ namespace ETD.EnemyControl
         private void Update()
         {
             if(isPathTester) { return; }
+            if(isStunned) { return; }
             Move();
         }
 
@@ -79,6 +81,22 @@ namespace ETD.EnemyControl
                 }
             }
             return false;
+        }
+
+        public void ProcessStun(DamageModifier attacker)
+        {
+            if (Mathf.RoundToInt(Random.Range(0.5f, attacker.GetStunChance() + (0.5f - Mathf.Epsilon))) == 1)
+            {
+                isStunned = true;
+                navMeshAgent.ResetPath();
+                StartCoroutine(StunTimer(attacker));
+            }
+        }
+
+        IEnumerator StunTimer(DamageModifier attacker)
+        {
+            yield return new WaitForSeconds(attacker.GetStatusEffectLifeTime());
+            isStunned = false;
         }
 
     }

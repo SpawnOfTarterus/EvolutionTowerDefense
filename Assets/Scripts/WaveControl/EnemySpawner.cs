@@ -34,7 +34,7 @@ namespace ETD.WaveControl
             {
                 yield return null;
             }
-            Debug.Log("Wave Finished.");
+            //Debug.Log("Wave Finished.");
             yield return SpawnNextWave();
         }
 
@@ -48,7 +48,7 @@ namespace ETD.WaveControl
             }
             else
             {
-                Debug.Log("All waves finished.");
+                //Debug.Log("All waves finished.");
             }
         }
 
