@@ -76,9 +76,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7431563733623329276, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
+      propertyPath: activeAbilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431563733623329276, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
       propertyPath: statusEffectDamagePerSecond
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7431563733623329276, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
+      propertyPath: activeAbilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: f2560b1a629260344a65a7a8072f3b4c, type: 2}
     - target: {fileID: 7431563733623329276, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
       propertyPath: statusEffectLifeTimeInSeconds
       value: 5

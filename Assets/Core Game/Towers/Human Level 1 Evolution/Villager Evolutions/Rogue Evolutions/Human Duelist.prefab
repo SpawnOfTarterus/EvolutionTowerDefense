@@ -79,5 +79,13 @@ PrefabInstance:
       propertyPath: numberCanAttack
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7431563733623329276, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
+      propertyPath: activeAbilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431563733623329276, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}
+      propertyPath: activeAbilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: eb0e409450189ff44b6fb7ce3285932d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37e210a2f2db34040ba97bc8d112834a, type: 3}

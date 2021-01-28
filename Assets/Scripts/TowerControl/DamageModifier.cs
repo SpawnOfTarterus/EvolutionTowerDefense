@@ -5,29 +5,13 @@ using UnityEngine;
 
 public class DamageModifier : MonoBehaviour
 {
-    [Header("Crit & Stun Control")]
-    [SerializeField] bool canCrit;
-    [SerializeField] float critMultiplier;
-    [SerializeField] float critAndStunChanceOneIn;
-    [Header("Range Damage Control")]
-    [SerializeField] bool damageIncreasedByDistance;
-    [Header("Status Effect Control")]
-    [SerializeField] statusEffects statusEffectToInflict;
-    [SerializeField] int statusEffectDamagePerSecond;
-    [SerializeField] int statusEffectLifeTimeInSeconds;
-    [SerializeField] float statusEffectRange;
-    [SerializeField] bool isPassive;
+    [SerializeField] AbilitiesAndStatusEffects[] activeAbilities;
 
     float half = 0.5f;
     float quarter = 0.25f;
     float processedDamage;
 
-    public statusEffects GetStatusEffect() { return statusEffectToInflict; }
-    public int GetStatusEffectDamage() { return statusEffectDamagePerSecond; }
-    public int GetStatusEffectLifeTime() { return statusEffectLifeTimeInSeconds; }
-    public float GetStatusEffectRange() { return statusEffectRange; }
-    public bool IsStatusEffectPassive() { return isPassive; }
-    public float GetStunChance() { return critAndStunChanceOneIn; }
+    public AbilitiesAndStatusEffects[] GetActiveAbilities() { return activeAbilities; }
 
     public float CalculateDamageForProjectile(int rawDamage, evoTypes attackerType, evoTypes targetType)
     {
@@ -53,25 +37,31 @@ public class DamageModifier : MonoBehaviour
 
     private void ProcessChangeForRange()
     {
-        if (damageIncreasedByDistance)
+        foreach(AbilitiesAndStatusEffects ability in activeAbilities)
         {
-            float distanceToTarget = Vector3.Distance
-                (transform.position, GetComponent<Attacker>().GetCurrentTarget().transform.position);
-            processedDamage *= Mathf.Max
-                (1, distanceToTarget / (GetComponent<Attacker>().GetRange() * half));
-            //any distance <= half the range = 1x damage. Any distance > half the range = up to 2x damage at full range.
+            if(ability.GetAbility() == abilities.Sniper)
+            {
+                float distanceToTarget = Vector3.Distance
+                    (transform.position, GetComponent<Attacker>().GetCurrentTarget().transform.position);
+                processedDamage *= Mathf.Max
+                    (1, distanceToTarget / (GetComponent<Attacker>().GetRange() * half));
+                //any distance <= half the range = 1x damage. Any distance > half the range = up to 2x damage at full range.
+            }
         }
     }
 
     private void ProcessChangeForCrit()
     {
-        if (canCrit) 
-        { 
-            //0.5 is used to start and added to the end to give 1 and 4 an equal chance to roll as 2 and 3.
-            //mathf.epsilon is used to prevent 5 from being rolled.
-            if(Mathf.RoundToInt(Random.Range(0.5f, critAndStunChanceOneIn + (0.5f - Mathf.Epsilon))) == 1)
+        foreach(AbilitiesAndStatusEffects ability in activeAbilities)
+        {
+            if (ability.GetAbility() == abilities.Crit)
             {
-                processedDamage *= critMultiplier;
+                //0.5 is used to start and added to the end to give 1 and 4 an equal chance to roll as 2 and 3.
+                //mathf.epsilon is used to prevent 5 from being rolled.
+                if(Mathf.RoundToInt(Random.Range(0.5f, ability.GetEffectChance() + (0.5f - Mathf.Epsilon))) == 1)
+                {
+                    processedDamage *= ability.GetDamageMultiplier();
+                }
             }
         }
     }

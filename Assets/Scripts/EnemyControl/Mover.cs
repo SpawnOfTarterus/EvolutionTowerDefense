@@ -83,20 +83,22 @@ namespace ETD.EnemyControl
             return false;
         }
 
-        public void ProcessStun(DamageModifier attacker)
+        public void ApplyStatusEffect(AbilitiesAndStatusEffects effect)
         {
-            if (Mathf.RoundToInt(Random.Range(0.5f, attacker.GetStunChance() + (0.5f - Mathf.Epsilon))) == 1)
+            if (Mathf.RoundToInt(Random.Range(0.5f, effect.GetEffectChance() + (0.5f - Mathf.Epsilon))) == 1)
             {
                 isStunned = true;
                 navMeshAgent.ResetPath();
-                StartCoroutine(StunTimer(attacker));
+                StartCoroutine(StunTimer(effect));
             }
+            else { GetComponent<DefenceApplicator>().RemoveStatusEffect(effect.GetStatusEffect()); }
         }
 
-        IEnumerator StunTimer(DamageModifier attacker)
+        IEnumerator StunTimer(AbilitiesAndStatusEffects effect)
         {
-            yield return new WaitForSeconds(attacker.GetStatusEffectLifeTime());
+            yield return new WaitForSeconds(effect.GetStatusEffectLifeTime());
             isStunned = false;
+            GetComponent<DefenceApplicator>().RemoveStatusEffect(effect.GetStatusEffect());
         }
 
     }

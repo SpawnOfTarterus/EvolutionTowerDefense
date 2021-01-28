@@ -91,5 +91,13 @@ PrefabInstance:
       propertyPath: statusEffectToInflict
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5484144964479021263, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}
+      propertyPath: activeAbilities.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484144964479021263, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}
+      propertyPath: activeAbilities.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: fa8f4c230ec75aa42afc48acdc167767, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe5efaecc71074d47a82b232b6228f8a, type: 3}

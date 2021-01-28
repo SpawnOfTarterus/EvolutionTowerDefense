@@ -44,9 +44,20 @@ namespace ETD.TowerControl
             return timeBetweenAttacks;
         }
 
+        private void Start()
+        {
+            AbilitiesAndStatusEffects[] myAbilities = GetComponent<DamageModifier>().GetActiveAbilities();
+            foreach(AbilitiesAndStatusEffects ability in myAbilities)
+            {
+                if(ability.GetAbility() == abilities.MultiShot)
+                {
+                    numberCanAttack = ability.GetMultiHitCount();
+                }
+            }
+        }
+
         private void Update()
         {
-            GetTargetsInStatusEffectRange();
             AttackMechanic();
         }
 
@@ -84,21 +95,6 @@ namespace ETD.TowerControl
                 else if (distanceToEnemy <= range)
                 {
                     if (!potentialTargets.Contains(enemy)) { potentialTargets.Add(enemy); }
-                }
-            }
-        }
-
-        private void GetTargetsInStatusEffectRange()
-        {
-            if(!GetComponent<DamageModifier>().IsStatusEffectPassive()) { return; }
-            Enemy[] enemies = FindObjectsOfType<Enemy>();
-            foreach (Enemy enemy in enemies)
-            {
-                DamageModifier damageModifier = GetComponent<DamageModifier>();
-                float distanceToEnemy = Vector3.Distance(enemy.transform.position, transform.position);
-                if (distanceToEnemy <= damageModifier.GetStatusEffectRange())
-                {
-                    enemy.GetComponent<DefenceApplicator>().ApplyStatusEffect(damageModifier.GetStatusEffect());
                 }
             }
         }

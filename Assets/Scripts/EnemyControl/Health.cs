@@ -25,32 +25,24 @@ namespace ETD.EnemyControl
             currentHealth = maxHealth;
         }
 
-        private void ApplyStatusEffect(DamageModifier attacker)
+        public void ApplyStatusEffect(AbilitiesAndStatusEffects effect)
         {
-            if(attacker.GetStatusEffect() == statusEffects.Poisoned) 
-            {
-                if (poisonCo != null) { StopCoroutine(poisonCo); }
-                poisonCo = StartCoroutine(ProcessPoison(attacker)); 
-            }
-            if(attacker.GetStatusEffect() == statusEffects.Stunned)
-            {
-                GetComponent<Mover>().ProcessStun(attacker);
-            }
+            if (poisonCo != null) { StopCoroutine(poisonCo); }
+            poisonCo = StartCoroutine(ProcessPoison(effect)); 
         }
 
-        IEnumerator ProcessPoison(DamageModifier attacker)
+        IEnumerator ProcessPoison(AbilitiesAndStatusEffects effect)
         {
-            for(int i = 0; i < attacker.GetStatusEffectLifeTime(); i++)
+            for(int i = 0; i < effect.GetStatusEffectLifeTime(); i++)
             {
                 yield return new WaitForSeconds(1);
-                LoseHealth(attacker.GetStatusEffectDamage());
+                LoseHealth(effect.GetStatusEffectDamage());
             }
+            GetComponent<DefenceApplicator>().RemoveStatusEffect(effect.GetStatusEffect());
         }
 
-        public void TakeDamage(int damage, DamageModifier attacker)
+        public void TakeDamage(int damage)
         {
-            myAttacker = attacker.GetComponent<Attacker>();
-            if (attacker.GetStatusEffect() != statusEffects.None) { ApplyStatusEffect(attacker); }
             LoseHealth(damage);
         }
 
