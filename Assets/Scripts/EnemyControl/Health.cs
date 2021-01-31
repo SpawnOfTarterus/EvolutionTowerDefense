@@ -60,7 +60,7 @@ namespace ETD.EnemyControl
         {
             if(isDead) { return; }
             isDead = true;
-            myAttacker.RemoveFromTargetLists(GetComponent<Enemy>());
+            if (myAttacker != null) { myAttacker.RemoveFromTargetLists(GetComponent<Enemy>()); }
             Enemy enemyComponent = GetComponent<Enemy>();
             enemyComponent.GetMySpawner().RemoveFromEnemiesInPlay(enemyComponent);
             if(currentHealth == 0)

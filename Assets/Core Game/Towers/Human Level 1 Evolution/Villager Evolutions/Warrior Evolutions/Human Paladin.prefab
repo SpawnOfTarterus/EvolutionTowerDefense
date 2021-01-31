@@ -11,6 +11,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human Paladin
       objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: activeAbilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: activeAbilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: dfd97a443b36ab748b93aa26331809fb, type: 2}
     - target: {fileID: 5170172519573616859, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
       propertyPath: m_RootOrder
       value: 0

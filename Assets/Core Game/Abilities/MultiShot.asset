@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80534444ecb035b41b07ee121efac65b, type: 3}
   m_Name: MultiShot
   m_EditorClassIdentifier: 
+  text: Can shoot more than 1 enemy at a time.
   ability: 3
   statusEffectToInflict: 0
   multiHitCount: 2
@@ -20,4 +21,6 @@ MonoBehaviour:
   statusEffectDamagePerSecond: 0
   statusEffectLifeTimeInSeconds: 0
   statusEffectRange: 0
-  isPassive: 0
+  attackSpeedIncrease: 0
+  isEnemyPassive: 0
+  isTowerPassive: 0

@@ -19,7 +19,7 @@ public class DefenceApplicator : MonoBehaviour
         foreach(AbilitiesAndStatusEffects effects in abilitiesAndEffects)
         {
             if(effects.GetStatusEffect() == statusEffects.None) { continue; }
-            if(effects.IsStatusEffectPassive()) { continue; }
+            if(effects.IsStatusEffectEnemyPassive()) { continue; }
             if(!currentStatusEffects.Contains(effects.GetStatusEffect()))
             {
                 currentStatusEffects.Add(effects.GetStatusEffect());
@@ -54,7 +54,7 @@ public class DefenceApplicator : MonoBehaviour
             AbilitiesAndStatusEffects[] abilities = tower.GetComponent<DamageModifier>().GetActiveAbilities();
             foreach(AbilitiesAndStatusEffects ability in abilities)
             {
-                if(ability.IsStatusEffectPassive())
+                if(ability.IsStatusEffectEnemyPassive())
                 {
                     if(!passives.Contains(ability.GetStatusEffect())) { passives.Add(ability.GetStatusEffect()); }
                     if(Vector3.Distance(transform.position, tower.transform.position) <= ability.GetStatusEffectRange())

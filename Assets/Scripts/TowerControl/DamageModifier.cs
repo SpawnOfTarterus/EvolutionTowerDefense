@@ -1,3 +1,4 @@
+using ETD.EnemyControl;
 using ETD.TowerControl;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,17 +11,18 @@ public class DamageModifier : MonoBehaviour
     float half = 0.5f;
     float quarter = 0.25f;
     float processedDamage;
+    bool isRelentlessInProgress;
 
     public AbilitiesAndStatusEffects[] GetActiveAbilities() { return activeAbilities; }
 
     public float CalculateDamageForProjectile(int rawDamage, evoTypes attackerType, evoTypes targetType)
     {
-        ProcessChangeForType(rawDamage, attackerType, targetType);
-        ProcessChangeForAbilities();
+        ProcessChangeForBuffsAndDebuffs(rawDamage, attackerType, targetType);
+        ProcessChangeForAbilities(attackerType, targetType);
         return processedDamage;
     }
 
-    private void ProcessChangeForType(int rawDamage, evoTypes attackerType, evoTypes targetType)
+    private void ProcessChangeForAttackerType(int rawDamage, evoTypes attackerType, evoTypes targetType)
     {
         if(attackerType == evoTypes.Human) { processedDamage = ProcessHumanAttack(rawDamage, targetType); }
         else if (attackerType == evoTypes.Beast) { processedDamage = ProcessBeastAttack(rawDamage, targetType); }
@@ -29,10 +31,105 @@ public class DamageModifier : MonoBehaviour
         else { processedDamage = rawDamage; }
     }
 
-    private void ProcessChangeForAbilities()
+    private void ProcessChangeForBuffsAndDebuffs(int rawDamage, evoTypes attackerType, evoTypes targetType)
+    {
+        //Separate from Abilites so buffs and debuffs Stack/Cancel out or are calculated Simultaneously
+        ProcessChangeForAttackerType(rawDamage, attackerType, targetType);
+        ProcessChangeForHoly(rawDamage, targetType);
+        ProcessChangeForMagical(rawDamage);
+        ProcessChangeForBlessing(rawDamage);
+    }
+
+    private void ProcessChangeForAbilities(evoTypes attackerType, evoTypes targetType)
     {
         ProcessChangeForRange();
         ProcessChangeForCrit();
+        ProcessChangeForRelentless();
+    }
+
+    private void ProcessChangeForBlessing(int rawDamage)
+    {
+        foreach (statusEffects effect in GetComponent<Tower>().GetActiveStatusEffects())
+        {
+            if(effect == statusEffects.Blessing)
+            {
+                DamageModifier damageModifier = GetComponent<Tower>().GetMyBuffGiver().GetComponent<DamageModifier>();
+                foreach(AbilitiesAndStatusEffects ability in damageModifier.GetActiveAbilities())
+                {
+                    if(ability.GetStatusEffect() == statusEffects.Blessing)
+                    {
+                        processedDamage += rawDamage * ability.GetDamageMultiplier();
+                    }
+                }
+            }
+        }
+    }
+
+    private void ProcessChangeForMagical(int rawDamage)
+    {
+        foreach (AbilitiesAndStatusEffects ability in activeAbilities)
+        {
+            if (ability.GetAbility() == abilities.Magical)
+            {
+                processedDamage += rawDamage * ability.GetDamageMultiplier();
+            }
+        }
+    }
+
+    private void ProcessChangeForHoly(int rawDamage, evoTypes targetType)
+    {
+        foreach (AbilitiesAndStatusEffects ability in activeAbilities)
+        {
+            if (ability.GetAbility() == abilities.Holy)
+            {
+                if(targetType == evoTypes.Undead)
+                {
+                    processedDamage += rawDamage * ability.GetDamageMultiplier();
+                }
+            }
+        }
+    }
+
+    private void ProcessChangeForRelentless()
+    {
+        foreach(AbilitiesAndStatusEffects ability in activeAbilities)
+        {
+            if(ability.GetAbility() == abilities.Relentless)
+            {
+                if(!isRelentlessInProgress)
+                {
+                    StartCoroutine(Relentless(ability));
+                }
+            }
+        }
+    }
+
+    IEnumerator Relentless(AbilitiesAndStatusEffects ability)
+    {
+        Debug.Log("Relentless started.");
+        Attacker attacker = GetComponent<Attacker>();
+        float startingAttackSpeed = attacker.GetAttackSpeed();
+        isRelentlessInProgress = true;
+        bool isEnemyInRange = true;
+        while(isEnemyInRange)
+        {
+            Debug.Log("Relentless continues.");
+            isEnemyInRange = false;
+            Enemy[] enemies = FindObjectsOfType<Enemy>();
+            foreach(Enemy enemy in enemies)
+            {
+                if(Vector3.Distance(enemy.transform.position, transform.position) <= attacker.GetRange())
+                {
+                    isEnemyInRange = true;
+                }
+            }
+            yield return new WaitForSeconds(1f);
+            attacker.SetAttackSpeed(attacker.GetAttackSpeed() + ability.GetAttackSpeedIncrease());
+            Debug.Log("New attack speed = " + attacker.GetAttackSpeed());
+        }
+        Debug.Log("Relentless Ended.");
+        attacker.SetAttackSpeed(startingAttackSpeed);
+        isRelentlessInProgress = false;
     }
 
     private void ProcessChangeForRange()

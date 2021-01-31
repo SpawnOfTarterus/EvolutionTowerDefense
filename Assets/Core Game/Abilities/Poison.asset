@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80534444ecb035b41b07ee121efac65b, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
+  text: Inflicts poison, dealing damage per second over a set amount of seconds.
+    (does not stack)
   ability: 0
   statusEffectToInflict: 1
   multiHitCount: 0
@@ -20,4 +22,6 @@ MonoBehaviour:
   statusEffectDamagePerSecond: 1
   statusEffectLifeTimeInSeconds: 5
   statusEffectRange: 0
-  isPassive: 0
+  attackSpeedIncrease: 0
+  isEnemyPassive: 0
+  isTowerPassive: 0

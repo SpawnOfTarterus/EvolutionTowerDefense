@@ -71,5 +71,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human Priestess
       objectReference: {fileID: 0}
+    - target: {fileID: 6906436636389412865, guid: 4f6fb717069f0004b8c5186d1fe77b33, type: 3}
+      propertyPath: activeAbilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6906436636389412865, guid: 4f6fb717069f0004b8c5186d1fe77b33, type: 3}
+      propertyPath: activeAbilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: e0ec8515da0ed60468e237344c4f64f3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f6fb717069f0004b8c5186d1fe77b33, type: 3}

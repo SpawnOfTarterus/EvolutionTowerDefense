@@ -2664,7 +2664,7 @@ MonoBehaviour:
 '
   myDescription: This tower is used for mazing and as the root for all evolution
     paths.
-  buildingPrefab: {fileID: 1782718890699152180, guid: d4b7a66a283dbac498273485d80a785e, type: 3}
+  buildingPrefab: {fileID: 3150832585156135373, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
 --- !u!1 &1745108968671473003
 GameObject:
   m_ObjectHideFlags: 0

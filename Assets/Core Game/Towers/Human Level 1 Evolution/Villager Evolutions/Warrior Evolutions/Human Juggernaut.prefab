@@ -11,6 +11,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human Juggernaut
       objectReference: {fileID: 0}
+    - target: {fileID: 949051062574640097, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: attacksPerSecond
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: activeAbilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145221794513404933, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
+      propertyPath: activeAbilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e17feee376a4854d8d1210dec770b2a, type: 2}
     - target: {fileID: 5170172519573616859, guid: e95c9aee73b24174daeac0744ae8f0e7, type: 3}
       propertyPath: m_RootOrder
       value: 0

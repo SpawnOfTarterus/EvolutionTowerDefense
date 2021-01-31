@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80534444ecb035b41b07ee121efac65b, type: 3}
   m_Name: Intimidate
   m_EditorClassIdentifier: 
+  text: All enemies in range take 25% more damage from all sources.
   ability: 0
   statusEffectToInflict: 4
   multiHitCount: 0
-  damageMultiplier: 0
+  damageMultiplier: 0.25
   EffectChanceOneIn: 0
   statusEffectDamagePerSecond: 0
   statusEffectLifeTimeInSeconds: 0
   statusEffectRange: 4
-  isPassive: 1
+  attackSpeedIncrease: 0
+  isEnemyPassive: 0
+  isTowerPassive: 0

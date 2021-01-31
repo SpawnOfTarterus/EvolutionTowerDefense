@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80534444ecb035b41b07ee121efac65b, type: 3}
-  m_Name: Sniper
+  m_Name: Relentless
   m_EditorClassIdentifier: 
-  text: Deals increasing damage the further away the target is.
-  ability: 1
+  text: For every second Enemies are in range (1 second timer to reset ability) increase
+    attack speed.
+  ability: 4
   statusEffectToInflict: 0
   multiHitCount: 0
   damageMultiplier: 0
@@ -21,6 +22,5 @@ MonoBehaviour:
   statusEffectDamagePerSecond: 0
   statusEffectLifeTimeInSeconds: 0
   statusEffectRange: 0
-  attackSpeedIncrease: 0
-  isEnemyPassive: 0
-  isTowerPassive: 0
+  attackSpeedIncrease: 1
+  isPassive: 0

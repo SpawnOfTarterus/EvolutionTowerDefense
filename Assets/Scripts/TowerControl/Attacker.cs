@@ -10,7 +10,7 @@ namespace ETD.TowerControl
     {
         [SerializeField] int damage;
         [SerializeField] float range;
-        [SerializeField] float timeBetweenAttacks;
+        [SerializeField] float attacksPerSecond;
         [SerializeField] Projectile projectile;
         [SerializeField] int numberCanAttack = 1;
 
@@ -41,7 +41,12 @@ namespace ETD.TowerControl
 
         public float GetAttackSpeed()
         {
-            return timeBetweenAttacks;
+            return attacksPerSecond;
+        }
+
+        public void SetAttackSpeed(float newAttackSpeed)
+        {
+            attacksPerSecond = newAttackSpeed;
         }
 
         private void Start()
@@ -101,8 +106,8 @@ namespace ETD.TowerControl
 
         public void RemoveFromTargetLists(Enemy enemy)
         {
-            potentialTargets.Remove(enemy);
-            currentTargets.Remove(enemy);
+            if (potentialTargets.Contains(enemy)) { potentialTargets.Remove(enemy); }
+            if (currentTargets.Contains(enemy)) { currentTargets.Remove(enemy); }
         }
 
         private Enemy GetClosestEnemy()
@@ -123,7 +128,7 @@ namespace ETD.TowerControl
         private void AttackTargets()
         {
             attackTimer += Time.deltaTime;
-            if (attackTimer >= timeBetweenAttacks)
+            if (attackTimer >= 1f / attacksPerSecond)
             {
                 if(currentTargets.Count == 0) { return; }
                 foreach(Enemy target in currentTargets)

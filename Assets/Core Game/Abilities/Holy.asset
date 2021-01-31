@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80534444ecb035b41b07ee121efac65b, type: 3}
-  m_Name: Sniper
+  m_Name: Holy
   m_EditorClassIdentifier: 
-  text: Deals increasing damage the further away the target is.
-  ability: 1
+  text: Does 50% increased damage against Undead
+  ability: 5
   statusEffectToInflict: 0
   multiHitCount: 0
-  damageMultiplier: 0
+  damageMultiplier: 0.5
   EffectChanceOneIn: 0
   statusEffectDamagePerSecond: 0
   statusEffectLifeTimeInSeconds: 0

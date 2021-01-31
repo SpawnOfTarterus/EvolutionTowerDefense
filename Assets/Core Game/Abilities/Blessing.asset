@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80534444ecb035b41b07ee121efac65b, type: 3}
-  m_Name: Sniper
+  m_Name: Blessing
   m_EditorClassIdentifier: 
-  text: Deals increasing damage the further away the target is.
-  ability: 1
-  statusEffectToInflict: 0
+  text: Increases Damage of towers in range by 25%.
+  ability: 0
+  statusEffectToInflict: 6
   multiHitCount: 0
-  damageMultiplier: 0
+  damageMultiplier: 0.25
   EffectChanceOneIn: 0
   statusEffectDamagePerSecond: 0
   statusEffectLifeTimeInSeconds: 0
-  statusEffectRange: 0
+  statusEffectRange: 5
   attackSpeedIncrease: 0
   isEnemyPassive: 0
-  isTowerPassive: 0
+  isTowerPassive: 1

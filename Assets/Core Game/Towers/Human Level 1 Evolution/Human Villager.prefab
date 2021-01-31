@@ -97,6 +97,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -5827082499017162639, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
+      propertyPath: attacksPerSecond
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5827082499017162639, guid: c57f95b33e8bd8e44aa56c53036f1beb, type: 3}
       propertyPath: timeBetweenAttacks
       value: 1
       objectReference: {fileID: 0}
